@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orders-microservice-deployment-v2
+  namespace: cloud
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: orders-microservice
+      version: v2
+  template:
+    metadata:
+      labels:
+        app: orders-microservice
+        version: v2
+    spec:
+      containers:
+      - name: orders-microservice
+        image: orders-service:2.0
+        env:
+          - name: DB_HOST
+            valueFrom:
+              secretKeyRef:
+                name: orders-microservice-secret
+                key: host
+          - name: DB_USER
+            valueFrom:
+              secretKeyRef:
+                name: orders-microservice-secret
+                key: username
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: orders-microservice-secret
+                key: password
+          - name: USERS_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: orders-microservice-configmap
+                key: users-microservice
+          - name: PRODUCTS_HOST
+            valueFrom:
+              configMapKeyRef:
+                name: orders-microservice-configmap
+                key: products-microservice
+        ports:
+          - name: app-port
+            containerPort: 8000
+        resources:
+          requests:
+            cpu: "200m"
+            memory: "256Mi"
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
+        livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: app-port
+            initialDelaySeconds: 90
+            periodSeconds: 15
+            successThreshold: 1
+            failureThreshold: 10
+        readinessProbe:
+          httpGet:
+            path: /actuator/health/readiness
+            port: app-port
+          initialDelaySeconds: 60
+          periodSeconds: 15
+          successThreshold: 1
+          failureThreshold: 10

@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: cloud-db-service
+  namespace: cloud
+spec:
+  selector:
+    app: cloud-db
+  type: ClusterIP
+  ports:
+  - port: 3306
+    targetPort: 3306

@@ -1,0 +1,33 @@
+spring:
+  application:
+    name: orders-microservice
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/Cloud_DB?useSSL=false&serverTimezone=Europe/Madrid&&allowPublicKeyRetrieval=true
+    username: orders_manager
+    password: orders_password
+  jpa:
+    generate-ddl: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+    show-sql: true
+    hibernate:
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+server:
+  port: 8003
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      probes:
+        enabled: true
+microservices:
+  users:
+    url: http://localhost:8001
+  products:
+    url: http://localhost:8002

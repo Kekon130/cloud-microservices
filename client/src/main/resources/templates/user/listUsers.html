@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cloud App | Users List</title>
+    <link th:href="${@environment.getProperty('app.cdn.bootstrap-css')}" rel="stylesheet" />
+    <link th:href="${@environment.getProperty('app.cdn.bootstrap-icons')}" rel="stylesheet" />
+</head>
+<body>
+<div class="container" id="container" style="margin-top: 50px; margin-bottom: 50px;">
+    <div class="card">
+        <h2 th:text="${title}" class="card-header"></h2>
+        <div class="card-body">
+            <div th:if="${msg != null}" class="alert alert-success" th:text="${msg}" role="alert"></div>
+            <table class="table table-hover">
+                <thead class="thead-light">
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Surname</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="user : ${users}">
+                    <td th:text="${user.id}"></td>
+                    <td th:text="${user.name}"></td>
+                    <td th:text="${user.surname}"></td>
+                    <td>
+                        <a th:href="@{/uusers/delete/{id} (id = ${user.id})}" th:text="'Delete'" onclick="return confirm('Are you sure?')" class="btn btn-danger btn-sm" role="button" title="Delete User">
+                            <i class="fas fa-trash" aria-hidden="true"></i>
+                        </a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <nav th:replace="~{paginator-nav :: paginator}"></nav>
+        </div>
+    </div>
+    <hr>
+    <a class="btn btn-dark btn-sm" th:href="@{/uusers/new}" role="button">New User</a>
+    <hr>
+    <a class="btn btn-primary btn-sm" th:href="@{/}" role="button">Home</a>
+</div>
+<script th:src="${@environment.getProperty('app.cdn.bootstrap-js')}"></script>
+</body>
+</html>

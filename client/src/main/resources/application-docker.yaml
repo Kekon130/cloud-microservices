@@ -1,0 +1,38 @@
+spring:
+  application:
+    name: client_service
+  servlet:
+    encoding:
+      enabled: true
+      charset: UTF-8
+server:
+  port: 9000
+microservices:
+  users:
+    url: http://${USERS_HOST}:8000
+  products:
+    url: http://${PRODUCTS_HOST}:8000
+  orders:
+    url: http://${ORDERS_HOST}:8000
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      probes:
+        enabled: true
+logging:
+  level:
+    org:
+      springframework:
+        web:
+          client:
+            RestClient: DEBUG
+app:
+  cdn:
+    bootstrap-css: "https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+    bootstrap-js: "https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+    bootstrap-icons: "https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css"
+    font-awesome: "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"

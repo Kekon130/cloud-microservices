@@ -1,0 +1,22 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: products-virtualservice
+  namespace: cloud
+spec:
+  hosts:
+    - products-microservice-service
+  http:
+    - match:
+        - headers:
+            X-type:
+              exact: v2
+      route:
+        - destination:
+            host: products-microservice-service
+            subset: v2
+            
+    - route:
+        - destination:
+            host: products-microservice-service
+            subset: v1

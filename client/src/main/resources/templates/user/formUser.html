@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cloud App | New User</title>
+    <link th:href="${@environment.getProperty('app.cdn.bootstrap-css')}" rel="stylesheet" />
+    <link th:href="${@environment.getProperty('app.cdn.bootstrap-icons')}" rel="stylesheet" />
+</head>
+<body>
+<div class="container" id="container" style="margin-top: 50px; margin-bottom: 50px;">
+    <div class="card">
+        <h2 th:text="${title}" class="card-header"></h2>
+        <div class="card-body">
+            <form method="POST" th:action="@{/uusers/save}" th:object="${user}">
+                <div th:if="${#fields.hasErrors('*')}" class="alert alert-danger" role="alert">
+                    Please fix the following errors.
+                    <ul>
+                        <li th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
+                    </ul>
+                </div>
+                <div class="mb-3">
+                    <label for="name" class="form-label">Name of the User</label>
+                    <input type="text" class="form-control" th:field="*{name}" id="name" name="name" placeholder="Type here the name of the user" required="required">
+                </div>
+                <div class="mb-3">
+                    <label for="surname" class="form-label">Surname of the User</label>
+                    <input type="text" class="form-control" th:field="*{surname}" id="surname" name="surname" placeholder="Type here the surname of the user" required="required">
+                </div>
+                <div class="mb-3"></div>
+                <button type="submit" class="btn btn-dark">Save</button>
+            </form>
+        </div>
+    </div>
+    <hr>
+    <a class="btn btn-primary" th:href="@{/uusers/list}">Return</a>
+</div>
+<script th:src="${@environment.getProperty('app.cdn.bootstrap-js')}"></script>
+</body>
+</html>

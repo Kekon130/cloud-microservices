@@ -1,0 +1,81 @@
+services:
+  db:
+    image: mysql:9.5.0
+    container_name: cloud-db
+    hostname: cloud-db
+    restart: always
+    environment:
+      - MYSQL_RANDOM_ROOT_PASSWORD=yes
+    volumes:
+      - ./db/scripts:/docker-entrypoint-initdb.d
+      - cloud-data:/var/lib/mysql
+    networks:
+      - cloud-data-network
+  users-microservice:
+    image: users-service:2.0
+    container_name: users-microservice
+    hostname: users-microservice
+    depends_on:
+      - db
+    restart: always
+    environment:
+      - DB_HOST=cloud-db
+      - DB_USER=users_manager
+      - DB_PASSWORD=users_password
+    networks:
+      - cloud-data-network
+      - cloud-client-network
+  products-microservice:
+    image: products-service:2.0
+    container_name: products-microservice
+    hostname: products-microservice
+    depends_on:
+      - db
+    restart: always
+    environment:
+      - DB_HOST=cloud-db
+      - DB_USER=products_manager
+      - DB_PASSWORD=products_password
+    networks:
+      - cloud-data-network
+      - cloud-client-network
+  orders-microservice:
+    image: orders-service:2.0
+    container_name: orders-microservice
+    hostname: orders-microservice
+    depends_on:
+      - db
+    restart: always
+    environment:
+      - DB_HOST=cloud-db
+      - DB_USER=orders_manager
+      - DB_PASSWORD=orders_password
+      - USERS_HOST=users-microservice
+      - PRODUCTS_HOST=products-microservice
+    networks:
+      - cloud-data-network
+      - cloud-client-network
+  client-microservice:
+    image: client-service:1.0
+    container_name: client-microservice
+    hostname: client-microservice
+    depends_on:
+      - users-microservice
+      - products-microservice
+      - orders-microservice
+    restart: always
+    ports:
+      - "9000:9000"
+    environment:
+      - USERS_HOST=users-microservice
+      - PRODUCTS_HOST=products-microservice
+      - ORDERS_HOST=orders-microservice
+    networks:
+      - cloud-client-network
+volumes:
+  cloud-data:
+networks:
+  cloud-data-network:
+    driver: bridge
+  cloud-client-network:
+    driver: bridge

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cloud App | New Order</title>
+    <link th:href="${@environment.getProperty('app.cdn.bootstrap-css')}" rel="stylesheet" />
+    <link th:href="${@environment.getProperty('app.cdn.bootstrap-icons')}" rel="stylesheet" />
+</head>
+<body>
+<div class="container" id="container" style="margin-top: 50px; margin-bottom: 50px;">
+    <div class="card">
+        <h2 th:text="${title}" class="card-header"></h2>
+        <div class="card-body">
+            <form method="POST" th:action="@{/oorders/save}" th:object="${order}">
+                <div th:if="${#fields.hasErrors('*')}" class="alert alert-danger" role="alert">
+                    Please fix the following errors.
+                    <ul>
+                        <li th:each="err : ${#fields.errors('*')}" th:text="${err}"></li>
+                    </ul>
+                </div>
+                <div class="mb-3">
+                    <label for="userID" class="form-label">ID of the User</label>
+                    <input type="number" class="form-control" th:field="*{userId}" id="userID" name="userID" placeholder="Type here the ID of the user" required="required">
+                </div>
+                <div class="mb-3">
+                    <label for="productID" class="form-label">ID of the Product</label>
+                    <input type="number" class="form-control" th:field="*{productId}" id="productID" name="productID" placeholder="Type here the ID of the product" required="required">
+                </div>
+                <div class="mb-3">
+                    <label for="quantity" class="form-label">Number of units from the product</label>
+                    <input type="number" class="form-control" th:field="*{quantity}" id="quantity" name="quantity" placeholder="Type here the quantity" required="required">
+                </div>
+                <div class="mb-3"></div>
+                <button type="submit" class="btn btn-dark">Save</button>
+            </form>
+        </div>
+    </div>
+    <hr>
+    <a class="btn btn-primary" th:href="@{/oorders/list}">Return</a>
+</div>
+<script th:src="${@environment.getProperty('app.cdn.bootstrap-js')}"></script>
+</body>
+</html>

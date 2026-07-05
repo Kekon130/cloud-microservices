@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: client-configmap
+data:
+  users-microservice: users-microservice-service
+  products-microservice: products-microservice-service
+  orders-microservice: orders-microservice-service

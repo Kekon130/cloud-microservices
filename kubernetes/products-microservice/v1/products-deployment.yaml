@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: products-microservice-deployment-v1
+  namespace: cloud
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: products-microservice
+      version: v1
+  template:
+    metadata:
+      labels:
+        app: products-microservice
+        version: v1
+    spec:
+      containers:
+      - name: products-microservice
+        image: products-service:1.0
+        env:
+          - name: DB_HOST
+            valueFrom:
+              secretKeyRef:
+                name: products-microservice-secret
+                key: host
+          - name: DB_USER
+            valueFrom:
+              secretKeyRef:
+                name: products-microservice-secret
+                key: username
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: products-microservice-secret
+                key: password
+        ports:
+          - name: app-port
+            containerPort: 8000
+        resources:
+          requests:
+            cpu: "200m"
+            memory: "256Mi"
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
+        livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: app-port
+            initialDelaySeconds: 90
+            periodSeconds: 15
+            successThreshold: 1
+            failureThreshold: 10
+        readinessProbe:
+          httpGet:
+            path: /actuator/health/readiness
+            port: app-port
+          initialDelaySeconds: 60
+          periodSeconds: 15
+          successThreshold: 1
+          failureThreshold: 10

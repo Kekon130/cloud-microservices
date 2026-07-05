@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cloud-db-deployment
+  namespace: cloud
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cloud-db
+  template:
+    metadata:
+      labels:
+        app: cloud-db
+    spec:
+      containers:
+      - name: cloud-db
+        image: mysql:9.5.0
+        env:
+          - name: MYSQL_ROOT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: cloud-db-admin-secret
+                key: password
+        ports:
+          - containerPort: 3306
+        volumeMounts:
+          - name: cloud-db-storage
+            mountPath: /var/lib/mysql
+          - name: cloud-db-schema
+            mountPath: /docker-entrypoint-initdb.d/01_set_up.sql
+            subPath: 01_set_up.sql
+            readOnly: true
+          - name: cloud-db-init
+            mountPath: /docker-entrypoint-initdb.d/02_db_ini.sql
+            subPath: 02_db_ini.sql
+            readOnly: true
+        resources:
+          requests:
+            cpu: "250m"
+            memory: "512Mi"
+          limits:
+            cpu: "500m"
+            memory: "1Gi"
+      volumes:
+        - name: cloud-db-storage
+          persistentVolumeClaim:
+            claimName: cloud-db-pvc
+        - name: cloud-db-schema
+          secret:
+            secretName: cloud-db-schema
+        - name: cloud-db-init
+          secret:
+            secretName: cloud-db-init

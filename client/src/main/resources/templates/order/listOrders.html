@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cloud App | Orders List</title>
+    <link th:href="${@environment.getProperty('app.cdn.bootstrap-css')}" rel="stylesheet" />
+    <link th:href="${@environment.getProperty('app.cdn.bootstrap-icons')}" rel="stylesheet" />
+</head>
+<body>
+<div class="container" id="container" style="margin-top: 50px; margin-bottom: 50px;">
+    <div class="card">
+        <h2 th:text="${title}" class="card-header"></h2>
+        <div class="card-body">
+            <div th:if="${msg != null}" class="alert alert-success" th:text="${msg}" role="alert"></div>
+            <table class="table table-hover">
+                <thead class="thead-light">
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">User ID</th>
+                    <th scope="col">Product ID</th>
+                    <th scope="col">Total</th>
+                    <th scope="col">Date</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="order : ${orders}">
+                    <td th:text="${order.id}"></td>
+                    <td th:text="${order.user.id}"></td>
+                    <td th:text="${order.product.id}"></td>
+                    <td th:text="${order.total}"></td>
+                    <td th:text="${order.date}"></td>
+                    <td>
+                        <a th:href="@{/oorders/view/{id} (id = ${order.id})}" th:text="'Details'" class="btn btn-primary btn-sm" role="button" title="Oder Details">
+                            <i class="fas fa-pencil-alt" aria-hidden="true"></i>
+                        </a>
+                    </td>
+                    <td>
+                        <a th:href="@{/oorders/delete/{id} (id = ${order.id})}" th:text="'Delete'" onclick="return confirm('Are you sure?')" class="btn btn-danger btn-sm" role="button" title="Delete Order">
+                            <i class="fas fa-trash" aria-hidden="true"></i>
+                        </a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <nav th:replace="~{paginator-nav :: paginator}"></nav>
+        </div>
+    </div>
+    <hr>
+    <a class="btn btn-dark" th:href="@{/oorders/new}" role="button">New Order</a>
+    <hr>
+    <a class="btn btn-primary" th:href="@{/}" role="button">Home</a>
+</div>
+<script th:src="${@environment.getProperty('app.cdn.bootstrap-js')}"></script>
+</body>
+</html>
