@@ -4,7 +4,7 @@ metadata:
   name: orders-microservice-deployment-v1
   namespace: cloud
 spec:
-  replicas: 2
+  replicas: 3
   selector:
     matchLabels:
       app: orders-microservice
@@ -19,6 +19,8 @@ spec:
       - name: orders-microservice
         image: orders-service:1.0
         env:
+          - name: APP_VERSION
+            value: "v1"
           - name: DB_HOST
             valueFrom:
               secretKeyRef:

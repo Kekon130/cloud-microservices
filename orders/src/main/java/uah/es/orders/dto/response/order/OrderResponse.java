@@ -12,6 +12,7 @@ public class OrderResponse {
     private Integer quantity;
     private Float total;
     private String date;
+    private String version;
 
     public OrderResponse() {
     }
@@ -71,5 +72,13 @@ public class OrderResponse {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
     }
 }

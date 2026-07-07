@@ -4,6 +4,7 @@ public class ProductResponse {
     private Integer id;
     private String name;
     private Float price;
+    private String version;
 
     public ProductResponse() {
     }
@@ -36,5 +37,13 @@ public class ProductResponse {
 
     public void setPrice(Float price) {
         this.price = price;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
     }
 }

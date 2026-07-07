@@ -4,6 +4,7 @@ public class UserResponse {
     private Integer id;
     private String name;
     private String surname;
+    private String version;
 
     public UserResponse() {
     }
@@ -36,5 +37,13 @@ public class UserResponse {
 
     public void setSurname(String surname) {
         this.surname = surname;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
     }
 }

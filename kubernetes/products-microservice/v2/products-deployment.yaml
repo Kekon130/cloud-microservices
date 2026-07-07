@@ -4,7 +4,7 @@ metadata:
   name: products-microservice-deployment-v2
   namespace: cloud
 spec:
-  replicas: 2
+  replicas: 3
   selector:
     matchLabels:
       app: products-microservice
@@ -19,6 +19,8 @@ spec:
       - name: products-microservice
         image: products-service:2.0
         env:
+          - name: APP_VERSION
+            value: "v2"
           - name: DB_HOST
             valueFrom:
               secretKeyRef:

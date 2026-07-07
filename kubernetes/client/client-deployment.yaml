@@ -1,10 +1,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: client-deployment
+  name: client-deployment-v1
   namespace: cloud
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: client

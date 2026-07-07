@@ -1,5 +1,6 @@
 package uah.es.orders.mapper;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import uah.es.orders.client.IProductsClient;
@@ -17,6 +18,9 @@ import java.time.format.DateTimeFormatter;
 
 @Component
 public class OrderMapper implements IOrderMapper {
+
+    @Value("${app.version:v1}")
+    private String appVersion;
 
     @Override
     public Order toNewOrder(OrderNew orderNew) {
@@ -36,7 +40,7 @@ public class OrderMapper implements IOrderMapper {
         } else {
             DateTimeFormatter formatter = DateTimeFormatter
                     .ofPattern("uuuu/MM/dd");
-            return new OrderResponse(
+            OrderResponse response = new OrderResponse(
                     order.getId(),
                     new UserResponse(user.getId(), user.getName().concat(" ").concat(user.getSurname())),
                     new ProductResponse(product.getId(), product.getName()),
@@ -44,6 +48,8 @@ public class OrderMapper implements IOrderMapper {
                     order.getUnits() * product.getPrice(),
                     order.getDate().format(formatter)
             );
+            response.setVersion(appVersion);
+            return response;
         }
     }
 }

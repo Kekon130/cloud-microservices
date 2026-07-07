@@ -1,0 +1,44 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: client-virtualservice
+  namespace: cloud
+spec:
+  hosts:
+    - "*"
+  gateways:
+    - cloud-gateway
+  http:
+    - match:
+        - uri:
+            prefix: /users
+      route:
+        - destination:
+            host: users-microservice-service
+            subset: v1
+            port:
+              number: 8000
+    - match:
+        - uri:
+            prefix: /products
+      route:
+        - destination:
+            host: products-microservice-service
+            subset: v1
+            port:
+              number: 8000
+    - match:
+        - uri:
+            prefix: /orders
+      route:
+        - destination:
+            host: orders-microservice-service
+            subset: v1
+            port:
+              number: 8000
+    - route:
+        - destination:
+            host: client-service
+            subset: v1
+            port:
+              number: 9000
